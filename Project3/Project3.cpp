@@ -339,6 +339,16 @@ void SearchByLetter(vector<string>& name, char letter, map<string, vector<pair<s
         cout << name[i] << endl;
     }
 }
+void PrintMap(map<string, vector<pair<string, string>>>& maps) {
+    map<string, vector<pair<string, string>>>::iterator it;
+    auto start = std::chrono::high_resolution_clock::now();
+    for (it = maps.begin(); it != maps.end(); ++it) {
+        cout << it->first << endl;
+    }
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = duration_cast<std::chrono::microseconds>(stop - start);
+    cout << "Time for graph execution: " << duration.count() << endl;
+}
 
 int main()
 {
@@ -363,13 +373,77 @@ int main()
     cout << "2. Generate a female name" << endl;
     cout << "3. Generate a male name" << endl;
     cout << "4. Search for a name" << endl;
-    cout << "5. Print entire database" << endl;
+    cout << "5. Generate names beginning with a letter" << endl;
     cout << "6. Print entire database" << endl;
-    cout << "6. Exit" << endl;
+    cout << "7. Exit" << endl;
     
     int option;
     cin >> option;
-        
+        switch(option)
+        {
+            case 1:
+                //graph
+                graph.generateRandomName();
+                //map
+                string random = GenerateRandom(map2);
+                cout << random << endl;
+                break;
+                
+            case 2:
+                //graph
+                graph.generateFemaleName();
+                //map
+                string female = GenerateFemale(map2);
+                cout << female << endl;
+                break;
+                
+            case 3:
+                //graph
+                graph.generateMaleName();
+                //map
+                string male = GenerateMale(map2);
+                cout << male << endl;
+                break;
+                
+            case 4:
+            {
+                string name;
+                cout << "Please input name to search for: ";
+                cin >> name;
+                //graph
+                graph.searchName(name);
+                //map
+                string result = SearchName(name, map2);
+                if (result == "successful") {
+                    cout << name << " exist in generator" << endl;
+                }
+                else {
+                    cout << name << " does not exist in generator" << endl;
+                }
+                break;
+                
+            }
+            case 5:
+                //graph
+                char letter;
+                cout << "Please input a letter to generate names with: " << endl;
+                cin >> letter;
+                graph.generateNameLetter(letter);
+                //map
+                vector<string> names;
+                SearchByLetter(names, letter, map2);
+                break;
+                
+            case 6:
+                //graph
+                graph.printGraph();
+                //map
+                PrintMap(map2);
+                break;
+                
+            case 7:
+                exit(0);
+        }
     }
     
     /*while (option != 6)
