@@ -229,13 +229,14 @@ void ReadFromFile(string filename, map<string, vector<pair<string, string>>>& ma
     //if data keys's are names
     ifstream inFile(filename, ios_base::binary);
     //for testing purposes
-    if (inFile.is_open()) {
+    /*if (inFile.is_open()) {
         //check if the file is open
         cout << "File " << filename << " is open" << endl;
     }
     else {
         cout << "File is closed" << endl;
     }
+    */
     
     //variable to store current line read
     string currentline = "";
@@ -274,34 +275,71 @@ void ReadFromFile(string filename, map<string, vector<pair<string, string>>>& ma
             }
         }
         //add to map
-        /*if (map2.find(name) != map2.end()) {
-            if (map2[name].size() == 2) {
-                //do nothing we want no duplicates
-                //if the name exist for both genders do not insert
-            }
-            else {
-                map<string, vector<pair<string, string>>>::iterator it;
-                for (it = map2.begin(); it != map2.end(); ++it) {
-                    //cout << it->first << " ->";
-                    if (it->first == name) {
-                        //do not insert anymore
-                        if (it->second[0].first == gender) {
-                            //do nothing bc we dont want duplicate
-                        }
-                        else {
-                            map2[name].push_back(make_pair(gender, frequency));
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        else {
-        */
             map2[name].push_back(make_pair(gender, frequency));
-        //}
     }
 }
+string GenerateRandom(map<string, vector<pair<string, string>>>& map) {
+    //https://stackoverflow.com/questions/15425442/retrieve-random-key-element-for-stdmap-in-c
+    auto it = map.begin();
+    advance(it, rand() % map.size());
+    string random_key = it->first;
+    return random_key;
+}
+string GenerateMale(map<string, vector<pair<string, string>>>& map) {
+    string randmale;
+    bool isMale = false;
+    while (isMale == false) {
+        auto it = map.begin();
+        advance(it, rand() % map.size());
+        for (int j = 0; j < it->second.size(); j++) {
+            if (it->second[j].first == "M") {
+                isMale = true;
+                randmale = it->first;
+            }
+        }
+    }
+    return randmale;
+}
+string GenerateFemale(map<string, vector<pair<string, string>>>& map) {
+    string randfemale;
+    bool isFemale = false;
+    while (isFemale == false) {
+        auto it = map.begin();
+        advance(it, rand() % map.size());
+        for (int j = 0; j < it->second.size(); j++) {
+            if (it->second[j].first == "F") {
+                isFemale = true;
+                randfemale = it->first;
+            }
+        }
+    }
+    return randfemale;
+}
+string SearchName(string name, map<string, vector<pair<string, string>>>& map) {
+    string result = "";
+    if (map.find(name) != map.end()) {
+        result = result + "successful";
+    }
+    else {
+        result = result + "unsuccessful";
+    }
+    return result;
+}
+void SearchByLetter(vector<string>& name, char letter, map<string, vector<pair<string, string>>>& maps) {
+    map<string, vector<pair<string, string>>>::iterator it;
+    for (it = maps.begin(); it != maps.end(); ++it) {
+        string found = "";
+        string current = it->first;
+        if (current.at(0) == letter) {
+            found = it->first;
+            name.push_back(found);
+        }
+    }
+    for (int i = 0; i < name.size(); i++) {
+        cout << name[i] << endl;
+    }
+}
+
 int main()
 {
     Graph graph;
@@ -317,7 +355,7 @@ int main()
     //cout << map2.size() << endl;
     
     //menu driven program
-    
+    while (true) {
     cout << "Welcome to the Name Generator!" << endl;
     cout << "------------------------------------" << endl;
     cout << "Please select an option: " << endl;
@@ -326,12 +364,15 @@ int main()
     cout << "3. Generate a male name" << endl;
     cout << "4. Search for a name" << endl;
     cout << "5. Print entire database" << endl;
+    cout << "6. Print entire database" << endl;
     cout << "6. Exit" << endl;
     
     int option;
     cin >> option;
+        
+    }
     
-    while (option != 6)
+    /*while (option != 6)
     {
         switch(option)
         {
@@ -359,6 +400,7 @@ int main()
                 graph.printGraph();
         }
     }
+    */
     
   return 0;  
 }
