@@ -137,7 +137,7 @@ void Graph::generateFemaleName()
     {
         if (index == random_integer)
         {
-            if (it->first.gender == 'M')
+            if (it->first.gender == 'F')
             {
                 Vertex v = it->first;
                 printVertex(v);
