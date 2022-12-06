@@ -10,6 +10,215 @@
 #include <iomanip>
 using namespace std;
 
+struct Vertex
+{
+    string name;
+    char gender;
+    int popularity;
+    Vertex(string _name, char _gender, int _popularity)
+    {
+        name = _name;
+        gender = _gender;
+        popularity = _popularity;
+    }
+};
+
+bool isAlpha(Vertex a, Vertex b);
+
+class Graph
+{
+private:
+    vector<pair<Vertex, vector<Vertex>>> graph; // adjacency list
+public:
+    int numOfVertices;
+    void insertEdge(Vertex from, Vertex to);
+    void printVertex(Vertex v);
+    void generateRandomName();
+    void generateMaleName();
+    void generateFemaleName();
+    void generateNameLetter(char letter);
+    void searchName(string name);
+    void printGraph();
+};
+
+void Graph::insertEdge(Vertex from, Vertex to)
+{
+    for (auto it = graph.begin(); it != graph.end(); ++it)
+    {
+        if (it->first.name == from.name)
+        {
+            it->second.push_back(to);
+            return;
+        }
+    }
+    vector<Vertex> adj;
+    adj.push_back(to);
+    graph.push_back(make_pair(from, adj));
+}
+
+void Graph::generateRandomName()
+{
+    int min = 0;
+    int max = 88000;
+    
+    // generate random number within range of database
+    random_device rd;
+    mt19937 rng(rd());
+    uniform_int_distribution<int> uni(min,max);
+    auto random_integer = uni(rng);
+    int index = 0;
+    
+    for (auto it = graph.begin(); it != graph.end(); ++it)
+    {
+        if (index == random_integer)
+        {
+            Vertex v = it->first;
+            printVertex(v);
+            return;
+        }
+        else
+        {
+            index++;
+        }
+    }
+}
+
+void Graph::printVertex(Vertex v)
+{
+    cout << "Name: " << v.name << std::endl;
+    cout << "Gender: " << v.gender << std::endl;
+    cout << "Popularity: " << v.popularity << std::endl;
+}
+
+void Graph::generateMaleName()
+{
+    int min = 0;
+    int max = 88000;
+    
+    // generate random number within range of database
+    random_device rd;
+    mt19937 rng(rd());
+    uniform_int_distribution<int> uni(min,max);
+    auto random_integer = uni(rng);
+    int index = 0;
+    
+    for (auto it = graph.begin(); it != graph.end(); ++it)
+    {
+        if (index == random_integer)
+        {
+            if (it->first.gender == 'M')
+            {
+                Vertex v = it->first;
+                printVertex(v);
+                return;
+            }
+            else
+            {
+                random_integer++;
+                index++;
+            }
+        }
+    }
+}
+
+void Graph::generateFemaleName()
+{
+    int min = 0;
+    int max = 88000;
+    
+    // generate random number within range of database
+    random_device rd;
+    mt19937 rng(rd());
+    uniform_int_distribution<int> uni(min,max);
+    auto random_integer = uni(rng);
+    int index = 0;
+    
+    for (auto it = graph.begin(); it != graph.end(); ++it)
+    {
+        if (index == random_integer)
+        {
+            if (it->first.gender == 'M')
+            {
+                Vertex v = it->first;
+                printVertex(v);
+                return;
+            }
+            else
+            {
+                random_integer++;
+                index++;
+            }
+        }
+    }
+}
+
+void Graph::generateNameLetter(char letter)
+{
+    int min = 0;
+    int max = 88000;
+    
+    // generate random number within range of database
+    random_device rd;
+    mt19937 rng(rd());
+    uniform_int_distribution<int> uni(min,max);
+    auto random_integer = uni(rng);
+    int index = 0;
+    
+    for (auto it = graph.begin(); it != graph.end(); ++it)
+    {
+        if (index == random_integer)
+        {
+            if (it->first.name[0] == letter)
+            {
+                Vertex v = it->first;
+                printVertex(v);
+                return;
+            }
+            else
+            {
+                index++;
+                random_integer++;
+            }
+        }
+        else
+        {
+            index++;
+        }
+    }
+}
+
+void Graph::searchName(string name)
+{
+    for (auto it = graph.begin(); it != graph.end(); ++it)
+    {
+        if (it->first.name == name)
+        {
+            printVertex(it->first);
+            return;
+        }
+    }
+    cout << "Name not found in database!" << endl;
+}
+
+void Graph::printGraph()
+{
+    vector<Vertex> names;
+    for (auto it = graph.begin(); it != graph.end(); ++it)
+        names.push_back(it->first);
+    
+    sort(names.begin(), names.end(), isAlpha);
+    
+    for (int i = 0; i < names.size(); i++)
+        printVertex(names.at(i));
+}
+
+
+bool isAlpha(Vertex a, Vertex b)
+{
+    return a.name < b.name;
+}
+
+
 void ReadFromFile(int year, string filename, map<int, vector<pair<string, pair<string, string>>>>& map) {
     //if data key's are years of files
     ifstream inFile(filename, ios_base::binary);
