@@ -203,6 +203,9 @@ void Graph::searchName(string name)
 void Graph::printGraph()
 {
     vector<Vertex> names;
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    
     for (auto it = graph.begin(); it != graph.end(); ++it)
         names.push_back(it->first);
     
@@ -210,6 +213,10 @@ void Graph::printGraph()
     
     for (int i = 0; i < names.size(); i++)
         printVertex(names.at(i));
+    
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = duration_cast<std::chrono::microseconds>(stop - start);
+    cout << "Time for graph execution: " << duration.count() << endl;
 }
 
 
@@ -297,6 +304,8 @@ void ReadFromFile(string filename, map<string, vector<pair<string, string>>>& ma
 }
 int main()
 {
+    Graph graph;
+    
     //reading of files
     //int year, string name, string sex, string frequency
     map<string, vector<pair<string, string>>> map2;
@@ -306,5 +315,50 @@ int main()
         ReadFromFile(nameoffile, map2);
     }
     //cout << map2.size() << endl;
+    
     //menu driven program
+    
+    cout << "Welcome to the Name Generator!" << endl;
+    cout << "------------------------------------" << endl;
+    cout << "Please select an option: " << endl;
+    cout << "1. Generate a random name" << endl;
+    cout << "2. Generate a female name" << endl;
+    cout << "3. Generate a male name" << endl;
+    cout << "4. Search for a name" << endl;
+    cout << "5. Print entire database" << endl;
+    cout << "6. Exit" << endl;
+    
+    int option;
+    cin >> option;
+    
+    while (option != 6)
+    {
+        switch(option)
+        {
+            case 1:
+                graph.generateRandomName();
+                break;
+                
+            case 2:
+                graph.generateFemaleName();
+                break;
+                
+            case 3:
+                graph.generateMaleName();
+                break;
+                
+            case 4:
+            {
+                string name;
+                cout << "Please input name to search for: ";
+                cin >> name;
+                graph.searchName(name);
+            }
+                
+            case 5:
+                graph.printGraph();
+        }
+    }
+    
+  return 0;  
 }
