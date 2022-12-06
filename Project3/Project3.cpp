@@ -8,6 +8,8 @@
 #include <vector>
 #include <iterator>
 #include <iomanip>
+#include <random>
+#include <chrono>
 using namespace std;
 
 struct Vertex
@@ -60,14 +62,14 @@ void Graph::generateRandomName()
 {
     int min = 0;
     int max = 88000;
-    
+
     // generate random number within range of database
     random_device rd;
     mt19937 rng(rd());
-    uniform_int_distribution<int> uni(min,max);
+    uniform_int_distribution<int> uni(min, max);
     auto random_integer = uni(rng);
     int index = 0;
-    
+
     for (auto it = graph.begin(); it != graph.end(); ++it)
     {
         if (index == random_integer)
@@ -94,14 +96,14 @@ void Graph::generateMaleName()
 {
     int min = 0;
     int max = 88000;
-    
+
     // generate random number within range of database
     random_device rd;
     mt19937 rng(rd());
-    uniform_int_distribution<int> uni(min,max);
+    uniform_int_distribution<int> uni(min, max);
     auto random_integer = uni(rng);
     int index = 0;
-    
+
     for (auto it = graph.begin(); it != graph.end(); ++it)
     {
         if (index == random_integer)
@@ -125,14 +127,14 @@ void Graph::generateFemaleName()
 {
     int min = 0;
     int max = 88000;
-    
+
     // generate random number within range of database
     random_device rd;
     mt19937 rng(rd());
-    uniform_int_distribution<int> uni(min,max);
+    uniform_int_distribution<int> uni(min, max);
     auto random_integer = uni(rng);
     int index = 0;
-    
+
     for (auto it = graph.begin(); it != graph.end(); ++it)
     {
         if (index == random_integer)
@@ -156,14 +158,14 @@ void Graph::generateNameLetter(char letter)
 {
     int min = 0;
     int max = 88000;
-    
+
     // generate random number within range of database
     random_device rd;
     mt19937 rng(rd());
-    uniform_int_distribution<int> uni(min,max);
+    uniform_int_distribution<int> uni(min, max);
     auto random_integer = uni(rng);
     int index = 0;
-    
+
     for (auto it = graph.begin(); it != graph.end(); ++it)
     {
         if (index == random_integer)
@@ -203,19 +205,19 @@ void Graph::searchName(string name)
 void Graph::printGraph()
 {
     vector<Vertex> names;
-    
+
     auto start = std::chrono::high_resolution_clock::now();
-    
+
     for (auto it = graph.begin(); it != graph.end(); ++it)
         names.push_back(it->first);
-    
+
     sort(names.begin(), names.end(), isAlpha);
-    
+
     for (int i = 0; i < names.size(); i++)
         printVertex(names.at(i));
-    
+
     auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = duration_cast<std::chrono::microseconds>(stop - start);
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
     cout << "Time for graph execution: " << duration.count() << endl;
 }
 
@@ -237,7 +239,7 @@ void ReadFromFile(string filename, map<string, vector<pair<string, string>>>& ma
         cout << "File is closed" << endl;
     }
     */
-    
+
     //variable to store current line read
     string currentline = "";
     while (getline(inFile, currentline)) {
@@ -275,7 +277,7 @@ void ReadFromFile(string filename, map<string, vector<pair<string, string>>>& ma
             }
         }
         //add to map
-            map2[name].push_back(make_pair(gender, frequency));
+        map2[name].push_back(make_pair(gender, frequency));
     }
 }
 string GenerateRandom(map<string, vector<pair<string, string>>>& map) {
@@ -346,135 +348,106 @@ void PrintMap(map<string, vector<pair<string, string>>>& maps) {
         cout << it->first << endl;
     }
     auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = duration_cast<std::chrono::microseconds>(stop - start);
-    cout << "Time for graph execution: " << duration.count() << endl;
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    cout << "Time for map execution: " << duration.count() << endl;
 }
 
 int main()
 {
     Graph graph;
-    
+
     //reading of files
     //int year, string name, string sex, string frequency
     map<string, vector<pair<string, string>>> map2;
     for (int i = 1880; i != 2011; i++) {
-        string nameoffile = ""; 
+        string nameoffile = "";
         nameoffile = "archive/yob" + to_string(i) + ".txt";
         ReadFromFile(nameoffile, map2);
     }
     //cout << map2.size() << endl;
-    
+
     //menu driven program
     while (true) {
-    cout << "Welcome to the Name Generator!" << endl;
-    cout << "------------------------------------" << endl;
-    cout << "Please select an option: " << endl;
-    cout << "1. Generate a random name" << endl;
-    cout << "2. Generate a female name" << endl;
-    cout << "3. Generate a male name" << endl;
-    cout << "4. Search for a name" << endl;
-    cout << "5. Generate names beginning with a letter" << endl;
-    cout << "6. Print entire database" << endl;
-    cout << "7. Exit" << endl;
-    
-    int option;
-    cin >> option;
-        switch(option)
+        cout << "Welcome to the Name Generator!" << endl;
+        cout << "------------------------------------" << endl;
+        cout << "Please select an option: " << endl;
+        cout << "1. Generate a random name" << endl;
+        cout << "2. Generate a female name" << endl;
+        cout << "3. Generate a male name" << endl;
+        cout << "4. Search for a name" << endl;
+        cout << "5. Generate names beginning with a letter" << endl;
+        cout << "6. Print entire database" << endl;
+        cout << "7. Exit" << endl;
+        string random;
+        string female;
+        string male;
+        vector<string> names;
+        int option;
+        cin >> option;
+        switch (option)
         {
-            case 1:
-                //graph
-                graph.generateRandomName();
-                //map
-                string random = GenerateRandom(map2);
-                cout << random << endl;
-                break;
-                
-            case 2:
-                //graph
-                graph.generateFemaleName();
-                //map
-                string female = GenerateFemale(map2);
-                cout << female << endl;
-                break;
-                
-            case 3:
-                //graph
-                graph.generateMaleName();
-                //map
-                string male = GenerateMale(map2);
-                cout << male << endl;
-                break;
-                
-            case 4:
-            {
-                string name;
-                cout << "Please input name to search for: ";
-                cin >> name;
-                //graph
-                graph.searchName(name);
-                //map
-                string result = SearchName(name, map2);
-                if (result == "successful") {
-                    cout << name << " exist in generator" << endl;
-                }
-                else {
-                    cout << name << " does not exist in generator" << endl;
-                }
-                break;
-                
+        case 1:
+            //graph
+            graph.generateRandomName();
+            //map
+            random = GenerateRandom(map2);
+            cout << random << endl;
+            break;
+
+        case 2:
+            //graph
+            graph.generateFemaleName();
+            //map
+            female = GenerateFemale(map2);
+            cout << female << endl;
+            break;
+
+        case 3:
+            //graph
+            graph.generateMaleName();
+            //map
+            male = GenerateMale(map2);
+            cout << male << endl;
+            break;
+
+        case 4:
+        {
+            string name;
+            cout << "Please input name to search for: ";
+            cin >> name;
+            //graph
+            graph.searchName(name);
+            //map
+            string result = SearchName(name, map2);
+            if (result == "successful") {
+                cout << name << " exist in generator" << endl;
             }
-            case 5:
-                //graph
-                char letter;
-                cout << "Please input a letter to generate names with: " << endl;
-                cin >> letter;
-                graph.generateNameLetter(letter);
-                //map
-                vector<string> names;
-                SearchByLetter(names, letter, map2);
-                break;
-                
-            case 6:
-                //graph
-                graph.printGraph();
-                //map
-                PrintMap(map2);
-                break;
-                
-            case 7:
-                exit(0);
+            else {
+                cout << name << " does not exist in generator" << endl;
+            }
+            break;
+
+        }
+        case 5:
+            //graph
+            char letter;
+            cout << "Please input a letter to generate names with: " << endl;
+            cin >> letter;
+            graph.generateNameLetter(letter);
+            //map
+            SearchByLetter(names, letter, map2);
+            break;
+
+        case 6:
+            //graph
+            graph.printGraph();
+            //map
+            PrintMap(map2);
+            break;
+
+        case 7:
+            exit(0);
         }
     }
-    
-    /*while (option != 6)
-    {
-        switch(option)
-        {
-            case 1:
-                graph.generateRandomName();
-                break;
-                
-            case 2:
-                graph.generateFemaleName();
-                break;
-                
-            case 3:
-                graph.generateMaleName();
-                break;
-                
-            case 4:
-            {
-                string name;
-                cout << "Please input name to search for: ";
-                cin >> name;
-                graph.searchName(name);
-            }
-                
-            case 5:
-                graph.printGraph();
-        }
-    }
-    */
-    
-  return 0;  
+    return 0;
 }
