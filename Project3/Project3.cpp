@@ -415,7 +415,7 @@ int main()
     for (int i = 1880; i != 2011; i++) {
         string nameoffile = "";
         nameoffile = "archive/yob" + to_string(i) + ".txt";
-        ReadFromFile(nameoffile, graph);
+        ReadFromFile2(nameoffile, graph);
         ReadFromFile(nameoffile, map2);
     }
     //cout << map2.size() << endl;
