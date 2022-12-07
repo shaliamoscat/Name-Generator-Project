@@ -33,7 +33,7 @@ private:
     vector<pair<Vertex, vector<Vertex>>> graph; // adjacency list
 public:
     int numOfVertices;
-    void ReadFromFile2(string filename, Graph& graph);
+    void ReadFromFile2(string filename);
     void insertEdge(Vertex from, Vertex to);
     void printVertex(Vertex v);
     void generateRandomName();
@@ -44,17 +44,17 @@ public:
     void printGraph();
 };
 
-void Graph::ReadFromFile2(string filename, Graph& graph) {
+void Graph::ReadFromFile2(string filename) {
     ifstream inFile(filename, ios_base::binary);
     //for testing purposes
-    /*if (inFile.is_open()) {
+    if (inFile.is_open()) {
         //check if the file is open
         cout << "File " << filename << " is open" << endl;
     }
     else {
         cout << "File is closed" << endl;
     }
-    */
+    
 
     //variable to store current line read
     vector<Vertex> names;
@@ -98,12 +98,12 @@ void Graph::ReadFromFile2(string filename, Graph& graph) {
         names.push_back(v);
     }
     for (int i = 0; i < names.size(); i++)
-{
-    if (i == names.size() - 1)
-        break;
-    
-    graph.insertEdge(names.at(i), names.at(i + 1));
-}
+    {
+        if (i == names.size() - 1)
+            break;
+
+        Graph::insertEdge(names.at(i), names.at(i + 1));
+    }
 }
 
 void Graph::insertEdge(Vertex from, Vertex to)
@@ -123,15 +123,22 @@ void Graph::insertEdge(Vertex from, Vertex to)
 
 void Graph::generateRandomName()
 {
-    int min = 0;
-    int max = 88000;
+    //int min = 0;
+    //int max = 88000;
 
     // generate random number within range of database
-    random_device rd;
-    mt19937 rng(rd());
-    uniform_int_distribution<int> uni(min, max);
-    auto random_integer = uni(rng);
-    int index = 0;
+    //random_device rd;
+    //mt19937 rng(rd());
+    //uniform_int_distribution<int> uni(min, max);
+    //auto random_integer = uni(rng);
+    auto it = graph.begin();
+    advance(it, rand() % graph.size());
+    Vertex v = it->first;
+    printVertex(v);
+    //string random_key = it->first;
+    //return random_key;
+    
+    /*int index = 0;
 
     for (auto it = graph.begin(); it != graph.end(); ++it)
     {
@@ -146,6 +153,7 @@ void Graph::generateRandomName()
             index++;
         }
     }
+    */
 }
 
 void Graph::printVertex(Vertex v)
@@ -157,7 +165,22 @@ void Graph::printVertex(Vertex v)
 
 void Graph::generateMaleName()
 {
-    int min = 0;
+    bool isMale = false;
+    while (isMale == false) {
+        auto it = graph.begin();
+        advance(it, rand() % graph.size());
+        //for (auto it = graph.begin(); it != graph.end(); ++it)
+        //{
+            if (it->first.gender == 'M')
+            {
+                isMale = true;
+                Vertex v = it->first;
+                printVertex(v);
+            }
+        //}
+    }
+    
+    /*int min = 0;
     int max = 88000;
 
     // generate random number within range of database
@@ -184,71 +207,64 @@ void Graph::generateMaleName()
             }
         }
     }
+    */
 }
 
 void Graph::generateFemaleName()
 {
-    int min = 0;
-    int max = 88000;
+    /*
+    auto it = map.begin();
+    advance(it, rand() % map.size());
+    string random_key = it->first;
+    return random_key;
+    */
+    //int min = 0;
+    //int max = 88000;
 
     // generate random number within range of database
-    random_device rd;
-    mt19937 rng(rd());
-    uniform_int_distribution<int> uni(min, max);
-    auto random_integer = uni(rng);
-    int index = 0;
-
-    for (auto it = graph.begin(); it != graph.end(); ++it)
-    {
-        if (index == random_integer)
-        {
+    bool isFemale = false;
+    while (isFemale == false) {
+        auto it = graph.begin();
+        advance(it, rand() % graph.size());
+        //for (auto it = graph.begin(); it != graph.end(); ++it)
+        //{
             if (it->first.gender == 'F')
             {
+                isFemale = true;
                 Vertex v = it->first;
                 printVertex(v);
-                return;
             }
-            else
-            {
-                random_integer++;
-                index++;
-            }
-        }
+        //}
     }
 }
 
 void Graph::generateNameLetter(char letter)
 {
-    int min = 0;
-    int max = 88000;
-
+    //int min = 0;
+    //int max = 88000;
+    
+    //auto it = graph.begin();
+    //advance(it, rand() % graph.size());
+    //string random_key = it->first;
+    //return random_key;
     // generate random number within range of database
-    random_device rd;
-    mt19937 rng(rd());
-    uniform_int_distribution<int> uni(min, max);
-    auto random_integer = uni(rng);
-    int index = 0;
+    //random_device rd;
+    //mt19937 rng(rd());
+    //uniform_int_distribution<int> uni(min, max);
+    //auto random_integer = uni(rng);
+    //int index = 0;
 
     for (auto it = graph.begin(); it != graph.end(); ++it)
     {
-        if (index == random_integer)
-        {
+        //if (index == random_integer)
+        //{
             if (it->first.name[0] == letter)
             {
                 Vertex v = it->first;
                 printVertex(v);
-                return;
+                //return;
             }
-            else
-            {
-                index++;
-                random_integer++;
-            }
-        }
-        else
-        {
-            index++;
-        }
+            
     }
 }
 
@@ -294,14 +310,14 @@ void ReadFromFile(string filename, map<string, vector<pair<string, string>>>& ma
     //if data keys's are names
     ifstream inFile(filename, ios_base::binary);
     //for testing purposes
-    /*if (inFile.is_open()) {
+    if (inFile.is_open()) {
         //check if the file is open
         cout << "File " << filename << " is open" << endl;
     }
     else {
         cout << "File is closed" << endl;
     }
-    */
+    
 
     //variable to store current line read
     string currentline = "";
@@ -425,7 +441,7 @@ int main()
     for (int i = 1880; i != 2011; i++) {
         string nameoffile = "";
         nameoffile = "archive/yob" + to_string(i) + ".txt";
-        ReadFromFile(nameoffile, graph);
+        graph.ReadFromFile2(nameoffile);
         ReadFromFile(nameoffile, map2);
     }
     //cout << map2.size() << endl;
