@@ -57,6 +57,7 @@ void Graph::ReadFromFile2(string filename, Graph& graph) {
     */
 
     //variable to store current line read
+    vector<Vertex> names;
     string currentline = "";
     while (getline(inFile, currentline)) {
         //Sample Line from .txt file: Mary,F,7065
@@ -93,9 +94,18 @@ void Graph::ReadFromFile2(string filename, Graph& graph) {
             }
         }
         //add to graph here
-        
+        Vertex v(name, gender[0], stoi(frequency));
+        names.push_back(v);
     }
+    for (int i = 0; i < names.size(); i++)
+{
+    if (i == names.size() - 1)
+        break;
+    
+    graph.insertEdge(names.at(i), names.at(i + 1));
 }
+}
+
 void Graph::insertEdge(Vertex from, Vertex to)
 {
     for (auto it = graph.begin(); it != graph.end(); ++it)
@@ -415,7 +425,7 @@ int main()
     for (int i = 1880; i != 2011; i++) {
         string nameoffile = "";
         nameoffile = "archive/yob" + to_string(i) + ".txt";
-        ReadFromFile2(nameoffile, graph);
+        ReadFromFile(nameoffile, graph);
         ReadFromFile(nameoffile, map2);
     }
     //cout << map2.size() << endl;
