@@ -1,4 +1,4 @@
-// Project3.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// GroupProject.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
@@ -33,6 +33,7 @@ private:
     vector<pair<Vertex, vector<Vertex>>> graph; // adjacency list
 public:
     int numOfVertices;
+    void ReadFromFile2(string filename, Graph& graph);
     void insertEdge(Vertex from, Vertex to);
     void printVertex(Vertex v);
     void generateRandomName();
@@ -43,6 +44,58 @@ public:
     void printGraph();
 };
 
+void Graph::ReadFromFile2(string filename, Graph& graph) {
+    ifstream inFile(filename, ios_base::binary);
+    //for testing purposes
+    /*if (inFile.is_open()) {
+        //check if the file is open
+        cout << "File " << filename << " is open" << endl;
+    }
+    else {
+        cout << "File is closed" << endl;
+    }
+    */
+
+    //variable to store current line read
+    string currentline = "";
+    while (getline(inFile, currentline)) {
+        //Sample Line from .txt file: Mary,F,7065
+        //keep reading until there are no more lines to get
+        //read current line and store to variable
+        //variable definitions needed for parsing lines
+        int comma = 0;
+        string name = "";
+        string gender = "";
+        string frequency = "";
+        // for loop to iterate through line read and extract name, gender, frequency
+        for (int i = 0; i < currentline.size(); i++) {
+            if (currentline.at(i) != ',') {
+                //if the current char has no comma
+                if (currentline.at(i) != '\r') {
+                    //or '\r' go ahead and extract
+                    if (comma == 0) {
+                        //before first comma store to string name
+                        name = name + currentline.at(i);
+                    }
+                    else if (comma == 1) {
+                        //after first comma store to string gender
+                        gender = gender + currentline.at(i);
+                    }
+                    else if (comma == 2) {
+                        //after second comma store to string frequency
+                        frequency = frequency + currentline.at(i);
+                    }
+                }
+            }
+            else {
+                //if a comma is reached increment variable
+                comma++;
+            }
+        }
+        //add to graph here
+        
+    }
+}
 void Graph::insertEdge(Vertex from, Vertex to)
 {
     for (auto it = graph.begin(); it != graph.end(); ++it)
@@ -362,6 +415,7 @@ int main()
     for (int i = 1880; i != 2011; i++) {
         string nameoffile = "";
         nameoffile = "archive/yob" + to_string(i) + ".txt";
+        ReadFromFile(nameoffile, graph);
         ReadFromFile(nameoffile, map2);
     }
     //cout << map2.size() << endl;
